@@ -22,6 +22,7 @@ public class DomainTestCase extends TestCase {
 
     @BeforeClass
     public void setUp() {
+
         nodeServiceImpl = new NodeServiceImpl();
         RegistryStore registryStore = new MemoryRegistryStore();
         nodeServiceImpl.setRegistryStore(registryStore);
