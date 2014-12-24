@@ -55,15 +55,6 @@ public class Node {
         return services;
     }
 
-    public Service getService(String name){
-        for(Service service : services){
-            if(name.equals(service.getName())){
-                return service;
-            }
-        }
-        return null;
-    }
-
     public void setServices(List<Service> services) {
         if (CollectionUtils.isNotEmpty(services)) {
             for (Service service : services) {
@@ -71,6 +62,15 @@ public class Node {
             }
         }
         this.services = services;
+    }
+
+    public Service getService(String name) {
+        for (Service service : services) {
+            if (name.equals(service.getName())) {
+                return service;
+            }
+        }
+        return null;
     }
 
     public Protocol getProtocol() {
