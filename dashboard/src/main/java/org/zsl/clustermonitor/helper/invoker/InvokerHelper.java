@@ -14,7 +14,7 @@ import java.util.Map;
  * TODO description
  * Created by liusz on 2014/12/23-22:27
  */
-public class InvokerHepler {
+public class InvokerHelper {
 
     private static Map<Protocol, Invoker> invokerMap = new HashMap<>();
 
