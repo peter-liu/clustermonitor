@@ -2,20 +2,24 @@ package org.zsl.clustermonitor.service.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import org.springframework.stereotype.Service;
 import org.zsl.clustermonitor.domain.*;
 import org.zsl.clustermonitor.helper.Protocol;
 import org.zsl.clustermonitor.helper.invoker.InvokerHelper;
 import org.zsl.clustermonitor.provider.RegistryStore;
-import org.zsl.clustermonitor.service.NodeServcie;
+import org.zsl.clustermonitor.service.NodeService;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
  * TODO description
  * Created by liusz on 2014/12/23-23:39
  */
-public class NodeServiceImpl implements NodeServcie {
+@Service
+public class NodeServiceImpl implements NodeService {
 
+    @Resource
     private RegistryStore registryStore;
 
     @Override public void register(String ip, Integer port, String config) {
@@ -65,15 +69,15 @@ public class NodeServiceImpl implements NodeServcie {
         return InvokerHelper.read(attribute);
     }
 
-    @Override public boolean check( HealthCheck check) {
+    @Override public boolean check(HealthCheck check) {
         Object monitorObject = check.getMonitorObject();
 
         Object result = null;
 
-        if(monitorObject instanceof Attribute){
+        if (monitorObject instanceof Attribute) {
             result = InvokerHelper.read((Attribute) monitorObject);
-        }else if(monitorObject instanceof Operation){
-            result = InvokerHelper.exec((Operation) monitorObject,null);
+        } else if (monitorObject instanceof Operation) {
+            result = InvokerHelper.exec((Operation) monitorObject, null);
         }
 
         check.setCurrentValue(result);

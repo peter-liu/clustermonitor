@@ -1,0 +1,27 @@
+
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr style="font-weight: bold">
+            <td>
+            <input name="dwTableAll"   id="dwTableAll" onclick="dwTableAll(this)"  type="checkbox""/>
+            table name
+            </td>
+        </tr>
+    </thead>
+    <tbody>
+        <%for(var i = 0 ;i<data.length;i++){ %>
+            <tr>
+            	<td>
+                    <label class="checkbox inline">
+                   		<input  name="dwTable"  id="<%=data[i].id%>" onclick=";" type="checkbox"  value="<%=data[i].name%>"/>
+                   		 <%=data[i].name%>
+               		 </label>
+                </td>
+               
+
+            </tr>
+        <%}%>
+    </tbody>
+</table>
+  
+

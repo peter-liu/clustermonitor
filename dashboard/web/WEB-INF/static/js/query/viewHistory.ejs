@@ -1,0 +1,33 @@
+<div class="modal hide">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">You have <%=data.total%> history items</h3>
+    </div>
+    <div class="modal-body">
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr style="font-weight: bold">
+                    <td>Sql</td>
+                    <td>Result</td>
+                </tr>
+            </thead>
+            <tbody>
+                <%for(var i = 0 ;i<data.history.length;i++){ %>
+                    <tr>
+                        <td>
+                            <%=data.history[i].sql%>
+                        </td>
+                        <td>
+                            <a href="javascript:query.fn.action.download('<%=data.history[i].history%>')"><%=data.history[i].history%></a>
+                        </td>
+
+                    </tr>
+                <%}%>
+            </tbody>
+        </table>
+    </div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+    </div>
+</div>
+

@@ -1,0 +1,10 @@
+##header #parse( "./include/variable.vm" )
+<!--start head-->
+<div class="head">
+	<h1>
+		<a href=""> 聚美促销规则管理系统</a>
+	</h1>
+	<span><a href="#">退出</a></span>
+	<div>用户：小小星期三</div>
+</div>
+<!--end head-->

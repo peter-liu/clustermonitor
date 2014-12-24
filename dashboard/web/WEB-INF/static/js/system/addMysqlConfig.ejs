@@ -1,0 +1,146 @@
+<div class="modal hide">
+    <div class="modal-header">
+        <h3>添加Mysql配置</h3>
+        <span id="showInfo" style="color: red"></span>
+    </div>
+    <div class="modal-body">
+        <form class="form-horizontal" id="addMysqlForm" style="padding: 0;">
+            <% if(data.add) {%>
+                <table class="table table-bordered" >
+                <tbody>
+                    <tr>
+                        <td style="border-top: none">
+                            <div class="control-group" >
+                                <label class="control-label" style="text-align: left" ><span style="color: red">*</span>host：</label>
+                                <div class="controls">
+                                    <input type="text" name="host" id="host" class="input-medium required" maxlength="20">
+                                </div>
+                            </div>
+                        </td>
+
+                        <td style="border-top: none;border-left:none">
+                            <div class="control-group">
+                                <label class="control-label"  style="text-align: left" ><span style="color: red">*</span>port：</label>
+                                <div class="controls">
+                                    <input type="text" name="port" id="port" class="input-medium required" maxlength="6" />
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="border-top: none">
+                            <div class="control-group" >
+                                <label class="control-label" style="text-align: left" ><span style="color: red">*</span>用户名：</label>
+                                <div class="controls">
+                                    <input  type="text" name="username" id="username" class="input-medium required">
+                                </div>
+                            </div>
+                        </td>
+
+                        <td style="border-top: none;border-left:none">
+                            <div class="control-group">
+                                <label class="control-label"  style="text-align: left" ><span style="color: red">*</span>密码：</label>
+                                <div class="controls">
+                                    <input value="" type="password" name="password" id="password" class="input-medium required">
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td style="border-top: none">
+                            <div class="control-group" >
+                                <label class="control-label" style="text-align: left" ><span style="color: red">*</span>dbName：</label>
+                                <div class="controls">
+                                    <input  type="text" name="dbName" id="dbName" class="input-medium required">
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <%}else {%>
+                <input type="hidden" name="id" id="id" value="<%=data.id%>">
+                <table class="table table-bordered" >
+                <tbody>
+                <tr>
+                    <td style="border-top: none">
+                        <div class="control-group" >
+                            <label class="control-label" style="text-align: left" ><span style="color: red">*</span>host：</label>
+                            <div class="controls">
+                                <input value="<%=data.host%>" type="text" name="host" id="host" class="input-medium required" maxlength="20">
+                            </div>
+                        </div>
+                    </td>
+
+                    <td style="border-top: none;border-left:none">
+                        <div class="control-group">
+                            <label class="control-label"  style="text-align: left" ><span style="color: red">*</span>port：</label>
+                            <div class="controls">
+                                <input value="<%=data.port%>" type="text" name="port" id="port" class="input-medium required" maxlength="6" />
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="border-top: none">
+                        <div class="control-group" >
+                            <label class="control-label" style="text-align: left" ><span style="color: red">*</span>用户名：</label>
+                            <div class="controls">
+                                <input value="<%=data.userName%>" type="text" name="username" id="username" class="input-medium required">
+                            </div>
+                        </div>
+                    </td>
+
+                    <td style="border-top: none;border-left:none">
+                        <div class="control-group">
+                            <label class="control-label"  style="text-align: left" ><span style="color: red">*</span>密码：</label>
+                            <div class="controls">
+                                <input value="<%=data.password%>" type="password" name="password" id="password" class="input-medium required">
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td style="border-top: none">
+                        <div class="control-group" >
+                            <label class="control-label" style="text-align: left" ><span style="color: red">*</span>dbName：</label>
+                            <div class="controls">
+                                <input  value="<%=data.dbName%>" type="text" name="dbName" id="dbName" class="input-medium required">
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <%}%>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" onclick="system.fn.addMysqlConfig('<%=data.randomDialogId%>');"   class="btn" id="save">确定</button>
+        <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+    </div>
+</div>
+<style type="text/css">
+    .form-horizontal .control-label {
+        padding-top: 15px;
+        width: 100px;
+    }
+    .form-horizontal .control-group {
+        margin-bottom: 0;
+    }
+    .form-horizontal .controls {
+        margin-left: 100px;
+        padding: 10px 0;
+    }
+    .error{
+        color: red;
+    }
+    .modal-header h3 {
+         font-size: 20px;
+        text-shadow: 0 1px 0 #ffffff;
+    }
+</style>
+

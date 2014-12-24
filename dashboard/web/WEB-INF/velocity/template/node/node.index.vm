@@ -1,0 +1,33 @@
+#parse( "./include/variable.vm" )
+
+
+<h1>Helper</h1>
+<h2>register node</h2>
+<form action="/mon/register">
+    <input type="text" name="ip" value="127.0.0.1"/>
+    <input type="text" name="port" value="8080"/>
+    <br/><br/>
+    <textarea name="config" rows="18" cols="40">
+        {
+        type: "management",
+        protocol: "jolokia_rest",
+        healthchecks: [
+        {
+        name :"",
+        ret : "",
+        description :"",
+        }
+        ],
+        operations: [
+        {
+        name :"",
+        ret :"",
+        description:""
+        }
+        ]}
+    </textarea><br/>
+    <input type="submit" value="submit"/>
+</form>
+
+
+

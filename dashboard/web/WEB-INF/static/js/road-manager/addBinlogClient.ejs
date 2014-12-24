@@ -1,0 +1,68 @@
+<div class="modal hide">
+    <div class="modal-header">
+        <h3>添加Binlog Client配置</h3>
+        <span id="showInfo" style="color: red"></span>
+    </div>
+    <div class="modal-body">
+        <form class="form-horizontal" id="addBinlogClientForm" style="padding: 0;">
+            <input type="hidden" name="applyId" id="applyId" value="<%=data.applyId%>">
+                <table class="table table-bordered" >
+                <tbody>
+                    <tr>
+                        <td style="border-top: none">
+                            <div class="control-group" >
+                                <label class="control-label" style="text-align: left" ><span style="color: red">*</span>binlog_pos：</label>
+                                <div class="controls">
+                                    <input type="text" name="binlogPos" id="binlogPos" class="input-medium required" maxlength="30">
+                                </div>
+                            </div>
+                        </td>
+                        <td style="border-top: none;border-left: none">
+                            <div class="control-group" >
+                                <label class="control-label" style="text-align: left" ><span style="color: red">*</span>Map Num：</label>
+                                <div class="controls">
+                                    <input type="text" name="mapNum" id="mapNum" class="input-mini required" maxlength="10">
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="border-top: none;">
+                            <div class="control-group">
+                                <label class="control-label"  style="text-align: left" ><span style="color: red">*</span>binlog：</label>
+                                <div class="controls">
+                                    <input type="text" name="binlog" id="binlog" class="input-medium required" maxlength="30" />
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" onclick="roadManager.fn.saveBinlogClient('<%=data.randomDialogId%>');"   class="btn" id="save">确定</button>
+        <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+    </div>
+</div>
+<style type="text/css">
+    .form-horizontal .control-label {
+        padding-top: 15px;
+        width: 100px;
+    }
+    .form-horizontal .control-group {
+        margin-bottom: 0;
+    }
+    .form-horizontal .controls {
+        margin-left: 100px;
+        padding: 10px 0;
+    }
+    .error{
+        color: red;
+    }
+    .modal-header h3 {
+         font-size: 20px;
+        text-shadow: 0 1px 0 #ffffff;
+    }
+</style>
+

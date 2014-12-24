@@ -1,0 +1,59 @@
+<div class="modal">
+    <div class="modal-header">
+        <h3>修改密码</h3>
+        <span id="showInfo" style="color: red"></span>
+    </div>
+    <div class="modal-body">
+        <form class="form-horizontal" id="updatePwdForm" style="padding: 0;">
+            <table class="table table-bordered" >
+                <tbody>
+                    <tr>
+                        <td style="border-top: none;border-left:none">
+                            <div class="control-group">
+                                <label class="control-label"  style="text-align: left" ><span style="color: red">*</span>新密码：</label>
+                                <div class="controls">
+                                    <input value="" type="password" name="password" id="password" class="input-medium required">
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="border-top: none;border-left:none">
+                            <div class="control-group">
+                                <label class="control-label"  style="text-align: left" ><span style="color: red">*</span>确认新密码：</label>
+                                <div class="controls">
+                                    <input value="" type="password" name="password1" id="password1" class="input-medium required">
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" onclick="system.fn.updatePwd('<%=data.randomDialogId%>');"   class="btn" id="save">确定</button>
+        <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+    </div>
+</div>
+<style type="text/css">
+    .form-horizontal .control-label {
+        padding-top: 15px;
+        width: 100px;
+    }
+    .form-horizontal .control-group {
+        margin-bottom: 0;
+    }
+    .form-horizontal .controls {
+        margin-left: 100px;
+        padding: 10px 0;
+    }
+    .error{
+        color: red;
+    }
+    .modal-header h3 {
+         font-size: 20px;
+        text-shadow: 0 1px 0 #ffffff;
+    }
+</style>
+

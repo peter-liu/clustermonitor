@@ -1,0 +1,25 @@
+<% for(var j = 0;j<data.column.length;j++){%>
+    <% if(j == 0){%>
+        <%if(data.column[j].status){%>
+            <label class="checkbox inline" style="margin-left: 10px">
+                <input checked  onclick="roadManager.fn.columnCheck(this);" id="<%=data.tableId%>&<%=data.column[j].column%>" type="checkbox" value="<%=data.column[j].column%>" name="column$<%=data.tableId%>"><%=data.column[j].column%>
+            </label>
+        <%}else{%>
+            <label class="checkbox inline" style="margin-left: 10px">
+                <input   onclick="roadManager.fn.columnCheck(this);" id="<%=data.tableId%>&<%=data.column[j].column%>" type="checkbox" value="<%=data.column[j].column%>" name="column$<%=data.tableId%>"><%=data.column[j].column%>
+            </label>
+        <%}%>
+
+        <%}else{%>
+            <%if(data.column[j].status){%>
+                <label class="checkbox inline">
+                    <input  checked onclick="roadManager.fn.columnCheck(this);" id="<%=data.tableId%>&<%=data.column[j].column%>" type="checkbox" value="<%=data.column[j].column%>" name="column$<%=data.tableId%>"><%=data.column[j].column%>
+                </label>
+            <%}else{%>
+                <label class="checkbox inline">
+                    <input  onclick="roadManager.fn.columnCheck(this);" id="<%=data.tableId%>&<%=data.column[j].column%>" type="checkbox" value="<%=data.column[j].column%>" name="column$<%=data.tableId%>"><%=data.column[j].column%>
+                </label>
+        <%}%>
+
+    <%}%>
+<%}%>

@@ -1,0 +1,110 @@
+body,input, button, select, textarea,.ui-widget {
+	font-family: '微软雅黑' !important;
+	
+}
+
+.left-nav a:hover{ text-decoration: none;}
+
+.head{ padding:0 15px;height:50px; background: #43484c; position: fixed; top: 0px; left: 0px; right: 0px; z-index: 10;}
+.head a:hover,.head a{ text-decoration: none;}
+.head a:hover{ color: #999; }
+.head h1 a{ float: left; color: #fff;line-height: 50px; text-shadow: 0 -1px 0 rgba(0,0,0,0.25);}
+.head span a,.head div{ float: right; color: #fff;line-height: 50px;}
+.head h1{margin: 0; cursor: pointer;}
+.head h1 a{  font-size: 20px;   padding-left: 45px; background: url('../img/icon.png') no-repeat left center; }
+.head div{ display: inline-block; margin-right: 30px; font-size: 12px;padding-left: 38px; background: url('../img/icon2.png') no-repeat left center;}
+.head span a{ font-size: 12px;padding-left: 36px; background: url('../img/icon3.png') no-repeat left center;}
+
+body,html{ height: 100%;  font-size: 12px; background: none;}
+.wrap{   position: relative; height: 100%; background: #f9f9f9; }
+
+.left-nav{  transition: margin-left 0.35s ease 0s; font-size: 12px;  margin: 0px; width:182px;  position: fixed; left: 0px; top: 50px; bottom: 0px;height:100%;background:#333333; }
+.left-nav .on ul li a{ color: #fff;}
+.left-nav .on ul li a:hover{ color: #2abf9e;}
+.left-nav li a{  display: block; position: relative; padding-left: 45px; line-height: 50px; height: 50px; font-size: 12px; color: #fff;}
+.left-nav li>a{  border-left:6px solid #333333;}
+.left-nav li span{
+    border: 5px solid #333333;
+    border-color: transparent transparent transparent #fff;
+    display: inline-block;
+    width: 0px;
+    height: 0px;
+    overflow: hidden;
+    overflow:hidden;_border-color:tomato tomato tomato white;_filter:chroma(color=tomato);
+    }
+.wrap-in{
+    padding-left: 192px;padding-top: 60px;
+    transition: padding-left 0.35s ease 0s;
+
+}
+.hide-slider .wrap-in{
+    padding-left: 10px;
+    transition: padding-left 0.35s ease 0s;
+}
+.hide-slider .left-nav{
+    margin-left: -182px;
+    transition: margin-left 0.35s ease 0s;
+}
+.left-nav a span{ position: absolute; right: 20px; top: 20px;}
+.left-nav .on a,.left-nav li a:hover{ color: #2abf9e;}
+.left-nav .on span,.left-nav  a:hover span{
+    border-color: transparent transparent transparent #2abf9e;
+    overflow:hidden;_border-color:tomato tomato tomato #2abf9e;_filter:chroma(color=tomato); }
+.left-nav .on >a{ border-left:6px solid #2abf9e; }
+.left-nav li  ul li a{ line-height: 30px; height: 30px;}
+.pageTabContent{ min-height: 100%;}
+
+
+
+.nav-top{ width: 905px;}
+.nav-top .nav-a{ margin: 0px;}
+.nav-top .nav-a a{ font-size: 12px; margin-right: 5px; text-align: center;position: relative; top: 1px; border: 1px solid #bababa; border-bottom: none; position: relative; color:#bababa;display: inline-block; line-height: 40px; width: 103px; background: #f9f9f9;}
+.nav-top .on{ background: #fff!important; color: #000!important;}
+/* .nav-top span{  position: absolute; right: 10px; top: 10px; color: #fff; background:#f66852; border-radius: 5px; line-height: 12px; font-size: 10px; } */
+.nav-content{ background: #fff; border: 1px solid #bababa;  padding: 20px;}
+
+.nav-content table .text-right{ text-align: right;  line-height: 30px; padding-right: 20px;}
+.nav-content table .text-center{ text-align: center;}
+.nav-content table td{ padding-bottom: 10px;}
+.nav-content .text-left label{ float: left; padding-right: 10px; font-size: 12px;}
+.nav-content .text-left label input{ margin: 0; display: inline-block; margin-right: 5px;}
+
+#pageTab {
+    margin-bottom: 10px;
+    width: 99%;
+    z-index: 3;
+    background: #efefef!important;
+     list-style: none;
+}
+#pageTab li {
+    font-size:12px; float: left;
+}
+#pageTab li a {
+    padding: 6px 8px 6px 15px;
+}
+#pageTab{
+    background-color: rgba(128, 128, 128, 0.17);
+}
+#pageTab .close{
+    line-height: 15px;
+    padding-left: 5px;
+}
+
+.table-jqgrid{ margin: 10px 0px; background: #fff;}
+
+
+.btn-card-sure{ position: relative;}
+.btn-card-sure .popover{ position: absolute;  left: 58px; top: 5px;}
+h1{ font-size: 20px; line-height:36px;border-bottom: 1px dashed #ddd}
+.card-div{  padding-bottom: 10px;  margin-bottom: 10px; border-bottom: 1px dashed #ddd;  }
+.card-div .input-small{ padding: 2px 4px; width: 90px; height: 26px; display: inline-block; margin-right: 4px; margin-left: 1px;}
+.card-div p{ margin: 5px 0px;}
+.singleProperty{ padding: 5px 0px; padding-left: 5px;}
+.marginT10{ margin-top: 10px;}
+.marginB10{ margin-bottom: 10px;}
+.lineH30{ line-height: 30px;}
+.tabbable{ position: relative;}
+.tab-pane .nav-pills{  position: absolute; top: 50px; z-index: 10; left: 10px;}
+.form-control{ display: inline-block; width: 220px; padding: 6px 10px; height: 31px;}
+.top2{ position: relative;top:3px;}
+.form-search table td{ padding: 8px 0px; }

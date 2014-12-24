@@ -1,0 +1,43 @@
+    <% for(var i = 0 ;i <data.length;i++){ %>
+        <tr>
+            <td>
+                <%= data[i].id%>
+            </td>
+            <td>
+                <%= data[i].applyName%>
+            </td>
+            <td>
+                <%= data[i].dbName%>
+            </td>
+            <td>
+                <%= data[i].tableNames%>
+            </td>
+            <td>
+                <% if(data[i].status == 'WAIT'){%>
+                    等待审批
+                <%}else if(data[i].status == 'INITING'){%>
+                    正在初始化
+                <%}else if(data[i].status == 'INITED'){%>
+                    初始化完成
+                <%}else if(data[i].status == 'PASS'){%>
+                    审批完成
+                <%}else if(data[i].status == 'NOT_PASS'){%>
+                    审批失败
+                <%}%>
+            </td>
+            <td>
+                <%=common.fn.formatDateTime(data[i].gmtCreated) %>
+            </td>
+            <td>
+                <a class="btn" href="javascript:roadManager.fn.getBinlogSyncTable(<%= data[i].id%>)">查看</a>
+                <% if(data[i].status == 'WAIT'  || data[i].status == 'NOT_PASS') {%>
+                    <button type="button" class="btn admin" onclick="roadManager.fn.showBinlogClientDialog(<%=data[i].id%>)">审批</button>
+                    <button type="button" class="btn admin" disabled>停止</button>
+                <%}else{%>
+                    <button type="button" disabled class="btn admin">审批</button>
+                    <button type="button" class="btn admin" onclick="roadManager.fn.stopBinlogClient(<%=data[i].id%>)">停止</button>
+                <%}%>
+                <br/>
+            </td>
+        </tr>
+    <% } %>
