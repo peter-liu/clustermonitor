@@ -1,5 +1,7 @@
 package org.zsl.clustermonitor.domain;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * TODO description
  * Created by liusz on 2014/12/23-22:09
@@ -19,6 +21,9 @@ public class Attribute {
     private String desc;
 
     public String getQualifier() {
+        if(StringUtils.isEmpty(qualifier)){
+            qualifier = this.getService().getName()+":"+this.getName();
+        }
         return qualifier;
     }
 

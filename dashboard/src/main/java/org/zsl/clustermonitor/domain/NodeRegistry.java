@@ -1,10 +1,11 @@
 package org.zsl.clustermonitor.domain;
 
 import com.alibaba.fastjson.JSONObject;
-import org.apache.commons.beanutils.BeanUtils;
+import com.sun.xml.internal.ws.addressing.v200408.MemberSubmissionWsaClientTube;
 import org.zsl.clustermonitor.helper.Protocol;
-import org.zsl.clustermonitor.helper.invoker.InvokerHepler;
+import org.zsl.clustermonitor.helper.invoker.InvokerHelper;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -25,9 +26,9 @@ public class NodeRegistry {
 
     private Protocol protocol;
 
-    private List<String> serviceNames;
+    private List<String> serviceNames = new ArrayList<>();
 
-    private List<String> healthCheckNames;
+    private List<String> healthCheckNames = new ArrayList<>();
 
     private JSONObject rawConfig;
 
@@ -41,26 +42,41 @@ public class NodeRegistry {
         // populate node
         this.node = new Node(system,ip,port,protocol);
 
+        node.setBasePath(rawConfig.getString("basePath"));
+        node.setSystem(rawConfig.getString("system"));
+
         // populate services
-        List<Service> services =  InvokerHepler.listService(node,serviceNames);
+        List<Service> services = InvokerHelper.listService(node, serviceNames);
+
+        node.setServices(services);
 
         // adjust duplicate attribute and operation
         //                  attribute and healthcheck
-        for(Service service: services){
-            List<Attribute> attributes = service.getAttributes();
-            Iterator<Attribute> attrIterator= attributes.iterator();
+        for(String healthCheckName : healthCheckNames){
+            String[] qualifiers = healthCheckName.split("/");
 
-            while(attrIterator.hasNext()){
-                Attribute attribute = attrIterator.next();
-                if(getHealthCheckNames().contains(attribute.getQualifier())){
-                    attrIterator.remove();
-                    HealthCheck healthCheck = new HealthCheck(attribute,"OK");
-                    service.addHealthCheck(healthCheck);
+            Service service = node.getService(qualifiers[0]);
+
+            Attribute attribute = service.getAttribute(qualifiers[1]);
+            if(  attribute != null){
+                service.getAttributes().remove(attribute);
+                HealthCheck healthCheckWrapper = new HealthCheck(attribute,"OK");
+                service.addHealthCheck(healthCheckWrapper);
+                break;
+            }
+
+            Operation operation = service.getOperation(qualifiers[1]);
+            if( operation != null ){
+                service.getOperations().remove(operation);
+                HealthCheck healthCheckWrapper = new HealthCheck(operation);
+                if(!operation.getRetType().equals("void")){
+                    healthCheckWrapper.setExpectValue("OK");
                 }
+                service.addHealthCheck(healthCheckWrapper);
+                break;
             }
         }
 
-        node.setServices(services);
     }
 
     public List<Operation> getAllOperations() {
@@ -139,5 +155,13 @@ public class NodeRegistry {
 
     public void setNode(Node node) {
         this.node = node;
+    }
+
+    public void addRegisterServiceName(String serviceName) {
+        this.getServiceNames().add(serviceName);
+    }
+
+    public void addHealthCheckName(String healthcheck) {
+        this.getHealthCheckNames().add(healthcheck);
     }
 }

@@ -6,13 +6,7 @@ package org.zsl.clustermonitor.helper;
  */
 public enum Protocol {
 
-    Jolokia("jolokia"),
-    JMX("JMX");
-
-    private final String name;
-
-    Protocol(String name){
-        this.name = name;
-    }
+    Jolokia(),
+    JMX();
 
 }

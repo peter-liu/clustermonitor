@@ -21,19 +21,15 @@ public interface NodeServcie {
 
     public Object read(Attribute attribute);
 
-    public void check(HealthCheck check);
+    public boolean check(HealthCheck check);
 
     public Object exec(Operation operation, Object[] params);
 
-    public Object read(String qualifer);
+    public Object read(String ip,Integer port,String qualifer);
 
-    public Object check(String qualifer);
+    public boolean check(String ip,Integer port,String qualifer);
 
-    public Object exec(String qualifer, Object[] params);
+    public Object exec(String ip,Integer port,String qualifer, Object[] params);
 
-    public List<Service> getAllServices();
 
-    public List<Attribute> getAllAttributes();
-
-    public List<HealthCheck> getAllHealthChecks();
 }

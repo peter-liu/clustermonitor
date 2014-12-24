@@ -1,5 +1,8 @@
 package org.zsl.clustermonitor.domain;
 
+import com.alibaba.fastjson.JSONObject;
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * TODO description
  * Created by liusz on 2014/12/23-22:09
@@ -16,11 +19,14 @@ public class Operation {
 
     private String desc;
 
-    private String[] paramDefinitions;
+    private JSONObject[] paramDefinitions;
 
     private Service service;
 
     public String getQualifier() {
+        if(StringUtils.isEmpty(qualifier)){
+            qualifier = this.getService().getName()+":"+this.getName();
+        }
         return qualifier;
     }
 
@@ -68,11 +74,11 @@ public class Operation {
         this.desc = desc;
     }
 
-    public String[] getParamDefinitions() {
+    public JSONObject[] getParamDefinitions() {
         return paramDefinitions;
     }
 
-    public void setParamDefinitions(String[] paramDefinitions) {
+    public void setParamDefinitions(JSONObject[] paramDefinitions) {
         this.paramDefinitions = paramDefinitions;
     }
 }

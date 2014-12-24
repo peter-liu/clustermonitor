@@ -1,8 +1,11 @@
 package org.zsl.clustermonitor.domain;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.zsl.clustermonitor.helper.Protocol;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * TODO description
@@ -14,6 +17,7 @@ public class Node {
     private String ip;
     private Integer port;
     private Protocol protocol;
+    private String basePath;
     private List<Service> services;
 
     public Node(String system, String ip, Integer port, Protocol protocol) {
@@ -51,7 +55,21 @@ public class Node {
         return services;
     }
 
+    public Service getService(String name){
+        for(Service service : services){
+            if(name.equals(service.getName())){
+                return service;
+            }
+        }
+        return null;
+    }
+
     public void setServices(List<Service> services) {
+        if (CollectionUtils.isNotEmpty(services)) {
+            for (Service service : services) {
+                service.setNode(this);
+            }
+        }
         this.services = services;
     }
 
@@ -62,4 +80,63 @@ public class Node {
     public void setProtocol(Protocol protocol) {
         this.protocol = protocol;
     }
+
+    public String getBasePath() {
+        return basePath;
+    }
+
+    public void setBasePath(String basePath) {
+        this.basePath = basePath;
+    }
+
+    public Attribute getAttribute(String qualifier) {
+        String[] qualifiers = qualifier.split("/");
+
+        for (Service service : services) {
+            if (service.getName().equals(qualifiers[0])) {
+                return service.getAttribute(qualifiers[1]);
+            }
+        }
+        return null;
+    }
+
+    public HealthCheck getHealthCheck(String qualifier) {
+        String[] qualifiers = qualifier.split("/");
+
+        for (Service service : services) {
+            if (service.getName().equals(qualifiers[0])) {
+                return service.getHealthCheck(qualifiers[1]);
+            }
+        }
+        return null;
+    }
+
+    public Operation getOperation(String qualifier) {
+        String[] qualifiers = qualifier.split("/");
+
+        for (Service service : services) {
+            if (service.getName().equals(qualifiers[0])) {
+                return service.getOperation(qualifiers[1]);
+            }
+        }
+        return null;
+
+    }
+
+    public Integer getErrorCount() {
+        Integer errorCount = 0;
+        for (Service service : services) {
+            errorCount += service.getErrorCount();
+        }
+        return errorCount;
+    }
+
+    public List<HealthCheck> getErrorHealthChecks() {
+        List<HealthCheck> ret = new ArrayList<>();
+        for (Service service : services) {
+            ret.addAll(service.getErrorHealthChecks());
+        }
+        return ret;
+    }
+
 }
