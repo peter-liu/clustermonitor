@@ -1,10 +1,7 @@
 package org.zsl.clustermonitor.controller;
 
 import com.google.common.base.Function;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Multimap;
-import com.google.common.collect.Multimaps;
+import com.google.common.collect.*;
 import org.springframework.jca.cci.object.MappingRecordOperation;
 import org.zsl.clustermonitor.domain.Node;
 import org.zsl.clustermonitor.helper.Protocol;
@@ -68,6 +65,22 @@ public class TestMain {
 
         System.out.println(map);
 //        Multimaps.invert
+
+        List<String> list = new ArrayList<>();
+        list.add("1");
+
+        final List<Integer> first  = Lists.newArrayList(1, 2, 3);
+        final List<Integer> second = Lists.newArrayList(4, 5, 6);
+        final List<Integer> third  = Lists.newArrayList(7, 8, 9);
+        final Iterable<Integer> all =
+                Iterables.unmodifiableIterable(
+                        Iterables.concat(first, second, third));
+        System.out.println(all);
+        third.add(9999999);
+        System.out.println(all);
+
+
+
 
     }
 }

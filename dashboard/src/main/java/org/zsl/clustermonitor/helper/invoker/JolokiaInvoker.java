@@ -36,7 +36,7 @@ public class JolokiaInvoker extends Invoker {
 
             J4pExecRequest execRequest = new J4pExecRequest(objectName, operation.getName());// TODO exec操作目前暂不支持参数传递
 
-            return Objects.toString(j4p.execute(execRequest).asJSONObject().get("value"),"void");
+            return Objects.toString(j4p.execute(execRequest).asJSONObject().get("value"), "void");
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -119,6 +119,7 @@ public class JolokiaInvoker extends Invoker {
                             optConfig.getJSONArray("args")
                                     .toArray(new JSONObject[optConfig.getJSONArray("args").size()]));
                     operation.setName(key);
+                    operation.setQualifier(serviceName+"/"+key);
                     operation.setRetType(optConfig.getString("ret"));
                     ret.addOperation(operation);
                 }
@@ -137,6 +138,7 @@ public class JolokiaInvoker extends Invoker {
                     attribute.setDesc(attrConfig.getString("desc"));
                     attribute.setName(key);
                     attribute.setType(attrConfig.getString("type"));
+                    attribute.setQualifier(serviceName+"/"+key);
                     ret.addAttribute(attribute);
                 }
             }

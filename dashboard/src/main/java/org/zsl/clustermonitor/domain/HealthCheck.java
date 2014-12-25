@@ -4,11 +4,9 @@ package org.zsl.clustermonitor.domain;
  * TODO refactory
  * Created by liusz on 2014/12/23-22:09
  */
-public class HealthCheck {
+public class HealthCheck extends ServiceResource {
 
-    private Attribute attribute;
-
-    private Operation operation;
+    private ServiceResource target;
 
     private String expectValue;
 
@@ -21,19 +19,19 @@ public class HealthCheck {
     private Object currentValue;
 
     public HealthCheck(Attribute attribute, String expectValue) {
-        this.attribute = attribute;
+        this.target = attribute;
         this.expectValue = expectValue;
     }
 
     public HealthCheck(Operation operation) {
-        this.operation = operation;
+        this.target = operation;
     }
 
     public HealthCheck(Operation operation, String expectValue) {
         if (operation.getRetType().equals("void")) {
             throw new RuntimeException("operation do not has return value !");
         }
-        this.operation = operation;
+        this.target = operation;
         this.expectValue = expectValue;
 
     }
@@ -88,50 +86,26 @@ public class HealthCheck {
     }
 
     public Service getService() {
-        if (attribute != null) {
-            return attribute.getService();
-        } else if (operation != null) {
-            return operation.getService();
-        }
-        return null;
+        return target.getService();
     }
 
-    public void setService(Service service){
-        if (attribute != null) {
-            attribute.setService(service);
-        } else if (operation != null) {
-            operation.setService(service);
-        }
+    public void setService(Service service) {
+        target.setService(service);
     }
 
-    public String getName(){
-        if (attribute != null) {
-            return attribute.getName();
-        } else if (operation != null) {
-            return operation.getName();
-        }
-        return null;
+    public String getName() {
+        return target.getName();
     }
 
-    public String getDesc(){
-        if (attribute != null) {
-            return attribute.getDesc();
-        } else if (operation != null) {
-            return operation.getDesc();
-        }
-        return null;
+    public String getDesc() {
+        return target.getDesc();
     }
 
     public Object getMonitorObject() {
-        return attribute != null ? attribute : operation;
+        return target;
     }
 
-    public String getQualifier(){
-        if (attribute != null) {
-            return attribute.getQualifier();
-        } else if (operation != null) {
-            return operation.getQualifier();
-        }
-        return null;
+    public String getQualifier() {
+        return target.getQualifier();
     }
 }
