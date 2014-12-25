@@ -2,6 +2,8 @@ package org.zsl.clustermonitor.helper.invoker;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.google.common.collect.Collections2;
+import com.google.common.collect.Sets;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jolokia.client.J4pClient;
@@ -105,6 +107,7 @@ public class JolokiaInvoker extends Invoker {
 
         if (operations != null && !operations.isEmpty()) {
             Set<String> operationKeys = operations.keySet();
+
             if (CollectionUtils.isNotEmpty(operationKeys)) {
                 for (String key : operationKeys) {
                     JSONObject optConfig = operations.getJSONObject(key);
