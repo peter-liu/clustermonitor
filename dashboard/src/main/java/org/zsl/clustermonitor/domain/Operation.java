@@ -25,7 +25,7 @@ public class Operation {
 
     public String getQualifier() {
         if(StringUtils.isEmpty(qualifier)){
-            qualifier = this.getService().getName()+":"+this.getName();
+            qualifier = this.getService().getName()+"/"+this.getName();
         }
         return qualifier;
     }

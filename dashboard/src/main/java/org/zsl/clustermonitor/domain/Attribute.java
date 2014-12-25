@@ -20,9 +20,11 @@ public class Attribute {
 
     private String desc;
 
+    private String currentValue ;
+
     public String getQualifier() {
         if(StringUtils.isEmpty(qualifier)){
-            qualifier = this.getService().getName()+":"+this.getName();
+            qualifier = this.getService().getName()+"/"+this.getName();
         }
         return qualifier;
     }
@@ -69,5 +71,13 @@ public class Attribute {
 
     public void setDesc(String desc) {
         this.desc = desc;
+    }
+
+    public String getCurrentValue() {
+        return currentValue;
+    }
+
+    public void setCurrentValue(String currentValue) {
+        this.currentValue = currentValue;
     }
 }

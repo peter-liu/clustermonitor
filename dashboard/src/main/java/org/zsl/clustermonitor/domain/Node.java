@@ -1,6 +1,8 @@
 package org.zsl.clustermonitor.domain;
 
+import com.google.common.base.Joiner;
 import org.apache.commons.collections.CollectionUtils;
+import org.springframework.scheduling.quartz.SimpleTriggerBean;
 import org.zsl.clustermonitor.helper.Protocol;
 
 import java.util.ArrayList;
@@ -25,6 +27,10 @@ public class Node {
         this.ip = ip;
         this.port = port;
         this.protocol = protocol;
+    }
+
+    public String getQualifer() {
+        return Joiner.on("_").join(system, ip.replaceAll("[.]", "_"), port);
     }
 
     public String getSystem() {
@@ -138,5 +144,43 @@ public class Node {
         }
         return ret;
     }
+
+    /**
+     * TODO refactory
+     * @return
+     */
+    public List<HealthCheck> getAllHealthChecks() {
+        List<HealthCheck> ret = new ArrayList<>();
+        for (Service service : services) {
+            ret.addAll(service.getHealthChecks());
+        }
+        return ret;
+    }
+
+    /**
+     * TODO refactory
+     * @return
+     */
+    public List<Attribute> getAllAttributes(){
+        List<Attribute> ret = new ArrayList<>();
+        for (Service service : services) {
+            ret.addAll(service.getAttributes());
+        }
+        return ret;
+    }
+
+
+    /**
+     * TODO refactory
+     * @return
+     */
+    public List<Operation> getAllOperations(){
+        List<Operation> ret = new ArrayList<>();
+        for (Service service : services) {
+            ret.addAll(service.getOperations());
+        }
+        return ret;
+    }
+
 
 }

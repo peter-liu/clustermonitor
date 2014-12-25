@@ -17,6 +17,7 @@ import org.zsl.clustermonitor.domain.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -35,7 +36,7 @@ public class JolokiaInvoker extends Invoker {
 
             J4pExecRequest execRequest = new J4pExecRequest(objectName, operation.getName());// TODO exec操作目前暂不支持参数传递
 
-            return j4p.execute(execRequest).asJSONObject().toJSONString();
+            return Objects.toString(j4p.execute(execRequest).asJSONObject().get("value"),"void");
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -92,7 +93,7 @@ public class JolokiaInvoker extends Invoker {
         return ret;
     }
 
-    private Service transformToService(String serviceName , JSONObject serviceObject) {
+    protected Service transformToService(String serviceName , JSONObject serviceObject) {
         Service ret = new Service();
 
         //JSONObject serviceConfig = object;//object.getJSONObject(objectName);

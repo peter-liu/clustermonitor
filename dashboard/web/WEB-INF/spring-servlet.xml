@@ -34,11 +34,11 @@
 
     <!-- result resolvers start -->
 
-    <bean id="resourceBundleViewResolver"
-          class="org.springframework.web.servlet.view.ResourceBundleViewResolver">
-        <property name="basenames" value="views" />
-        <property name="order" value="0" />
-    </bean>
+    <!--<bean id="resourceBundleViewResolver"-->
+          <!--class="org.springframework.web.servlet.view.ResourceBundleViewResolver">-->
+        <!--<property name="basenames" value="views" />-->
+        <!--<property name="order" value="0" />-->
+    <!--</bean>-->
     <!-- velocity resolver -->
     <bean id="velocityViewResolver"
           class="org.springframework.web.servlet.view.velocity.VelocityLayoutViewResolver">

@@ -1,7 +1,7 @@
 package org.zsl.clustermonitor.domain;
 
 /**
- * TODO description
+ * TODO refactory
  * Created by liusz on 2014/12/23-22:09
  */
 public class HealthCheck {
@@ -113,7 +113,25 @@ public class HealthCheck {
         return null;
     }
 
+    public String getDesc(){
+        if (attribute != null) {
+            return attribute.getDesc();
+        } else if (operation != null) {
+            return operation.getDesc();
+        }
+        return null;
+    }
+
     public Object getMonitorObject() {
         return attribute != null ? attribute : operation;
+    }
+
+    public String getQualifier(){
+        if (attribute != null) {
+            return attribute.getQualifier();
+        } else if (operation != null) {
+            return operation.getQualifier();
+        }
+        return null;
     }
 }
