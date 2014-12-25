@@ -1,33 +1,295 @@
 #parse( "./include/variable.vm" )
+<style type="text/css">
+    /*.navbar .btn {*/
+        /*margin-top: 5px !important;*/
+    /*}*/
+
+    td{
+        text-align: center !important;
+    }
+
+    td.monitor-description{
+        text-align: left !important;
+    }
+    label.radio{
+        font-size: 12px !important;
+    }
+</style>
 
 
-<h1>Helper</h1>
-<h2>register node</h2>
-<form action="/mon/register">
-    <input type="text" name="ip" value="127.0.0.1"/>
-    <input type="text" name="port" value="8080"/>
-    <br/><br/>
-    <textarea name="config" rows="18" cols="40">
-        {
-        type: "management",
-        protocol: "jolokia_rest",
-        healthchecks: [
-        {
-        name :"",
-        ret : "",
-        description :"",
+<ul class="breadcrumb" style="margin-bottom:0px">
+    <li><a href="#">节点管理</a> <span class="divider">/</span></li>
+    <li>促销引擎</li>
+</ul>
+
+
+<div class="navbar">
+    <div class="navbar-inner">
+
+            <input type="text" class="search-query" style="margin-top: 5px;" placeholder="搜索" id="searchInput">
+
+            <label class="radio inline">
+                <input type="radio" name="filter_node_status" value="error">异常节点
+            </label>
+            <label class="radio inline">
+                <input type="radio" name="filter_node_status" value="correct">正常节点
+            </label>
+            <label class="radio inline">
+                <input type="radio" name="filter_node_status" value="">所有节点
+            </label>
+
+            <ul class="nav pull-right" role="navigation">
+                <li class="dropdown">
+                    <a id="drop1" href="#" role="button" class="dropdown-toggle" data-toggle="dropdown">批量操作<b class="caret"></b></a>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="drop1">
+                        <li role="presentation"><a role="menuitem" tabindex="-1" href="http://google.com">Action</a></li>
+                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#anotherAction">Another action</a></li>
+                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Something else here</a></li>
+                        <li role="presentation" class="divider"></li>
+                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Separated link</a></li>
+                    </ul>
+                </li>
+            </ul>
+    </div>
+</div>
+
+
+<div class="accordion" id="node_accordion" style="margin:0px 30px;">
+    <h4>上线节点($nodes.size()) </h4>
+    #foreach($node in $nodes)
+        <div class="accordion-group" search_status="" search_keywords="${node.system} - ${node.ip}:${node.port} - ${node.protocol}">
+            <div class="accordion-heading node-header" errorCount="${node.errorCount}">
+                <a class="accordion-toggle" data-toggle="collapse" data-parent="#node_accordion"
+                   href="#NODE_${node.qualifer}">
+                    <span>${node.system} - ${node.ip}:${node.port} - ${node.protocol}</span> <span
+                        class="badge badge-success badge-count" style="float: right">0</span>
+                </a>
+            </div>
+            <div id="NODE_${node.qualifer}" class="accordion-body collapse in collapsed">
+                <div class="accordion-inner">
+
+                    <table class="table table-bordered table-striped">
+                        <colgroup>
+                            <col class="span1">
+                            <col class="span7">
+                        </colgroup>
+                        <thead>
+                        <tr>
+                            <th rowspan="3">状态检测</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                            #foreach($healthCheck in $node.allHealthChecks)
+                            <tr class="healthcheck-status" status="${healthCheck.isExpected()}">
+                                <td width="10%">
+                                    <code>${healthCheck.desc}</code>
+                                </td>
+                                <td width="15%">
+                                    <code ip="$node.ip" port="$node.port" healthcheck="$healthCheck.name">
+                                        #if( ! $!{healthCheck.currentValue})
+                                            Not Initialized
+                                        #else
+                                            $!{healthCheck.currentValue}
+                                        #end
+                                    </code>
+                                </td>
+                                <td class="monitor-description" width="65%">描述:<code>${healthCheck.name}</code> , 预期值:<code>${healthCheck.expectValue}</code>, <a href="javascript:checkHealth('${node.ip}','${node.port}','${healthCheck.qualifier}','${healthCheck.name}')">刷新</a></td>
+                            </tr>
+                            #end
+                        </tbody>
+                    </table>
+
+                    <table class="table table-bordered table-striped">
+                        <colgroup>
+                            <col class="span1">
+                            <col class="span7">
+                        </colgroup>
+                        <thead>
+                        <tr>
+                            <th rowspan="3">运行时指标</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                            #foreach($attribute in $node.allAttributes)
+                            <tr  status="${attribute.isExpected()}">
+                                <td width="10%">
+                                    <code>${attribute.desc}</code>
+                                </td>
+                                <td width="15%">
+                                    <code ip="$node.ip" port="$node.port" attribute="$attribute.name">
+                                        #if( ! $attribute.currentValue)
+                                            Not Initialized
+                                        #else
+                                            ${attribute.currentValue}
+                                        #end
+                                    </code>
+                                </td>
+
+                                <td class="monitor-description" width="65%">描述:<code>${attribute.name}</code>,<a href="javascript:readAttribute('${node.ip}','${node.port}','${attribute.qualifier}','${attribute.name}')">刷新</a></td>
+                            </tr>
+                            #end
+                        </tbody>
+                    </table>
+
+
+                    <table class="table table-bordered table-striped">
+                        <colgroup>
+                            <col class="span1">
+                            <col class="span7">
+                        </colgroup>
+                        <thead>
+                        <tr>
+                            <th rowspan="3">管理操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                            #foreach($operation in $node.allOperations)
+                            <tr>
+                                <td width="10%">
+                                    <code>${operation.desc}</code>
+                                </td>
+                                <td width="15%">
+                                    <a href="javascript:execOperation('${node.ip}','${node.port}','${operation.qualifier}','${operation.name}')" class="btn btn-small btn-info">调用</a>
+                                </td>
+                                <td class="monitor-description" width="65%">描述:<code>${operation.name}</code></td>
+                            </tr>
+                            #end
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    #end
+
+</div>
+
+##<h2>register node</h2>
+##<form action="/node/register/regnode">
+##    <button type="submit" class="btn btn-small" value="Register">Register</button>
+##</form>
+<script>
+    $(function () {
+        $(".collapse:last").collapse("hide");
+        //$($(".collapse").get(0)).collapse("show");
+
+
+        $('#searchInput').keyup(function (t) {
+            filterNode();
+        });
+
+        $("input[name='filter_node_status']").click(function(ele){
+            filterNode();
+        });
+
+        $('.node-header').each(function (idx, ele) {
+            var errorCount = parseInt($(ele).attr("errorCount"), 10) ;
+            $(".badge-count", ele).html(errorCount);
+            if (errorCount > 0) {
+                $(ele).removeClass("alert-success");
+                $(ele).addClass("alert-error");
+                $(".badge-count", ele).removeClass("badge-success");
+                $(".badge-count", ele).addClass("badge-important");
+            }
+            $(ele).parent().attr("search_status",errorCount > 0 ? "error" : "correct");
+        });
+
+    })
+
+
+    function addErrorCount(ip,port,healthCheckName){
+        alert("add a error count");
+    }
+
+
+    /**
+     * health check
+     */
+    function checkHealth(ip,port,qualifier,healthCheckName){
+        $.ajax({
+            url: "/node/management/checkHealth",
+            data: {"ip":ip,"port":port, "healthCheckQualifier" : qualifier},
+            type: "post"
+        }).done(function(data) {
+            $("<div class='pull-center'><span >"+data+'</span></div>').dialog({title:"刷新结果("+healthCheckName+")",height:200,minHeight:200,modal: true});
+            eval("var res = " + data);
+            $("code[healthcheck='"+healthCheckName+"'][ip='"+ip+"']").text(res.value);
+
+            (!res.health) && addErrorCount(ip, port, healthCheckName);
+
+        }).fail(function(){
+            $('<div><span>System Error</span></div>').dialog({title:"刷新结果("+healthCheckName+")",minHeight:200,modal: true});
+        });
+    }
+
+    function execOperation(ip,port,qualifier,operationName){
+        debugger
+        $.ajax({
+            url: "/node/management/exec",
+            data: {"ip":ip,"port":port, "operationQualifier" : qualifier},
+            type: "post"
+        }).done(function(data) {
+            $("<div class='pull-center'><span >响应结果:"+data+'</span></div>').dialog({title:"调用结果("+operationName+")",height:200,minHeight:200,modal: true});
+            $("code[healthcheck='"+operationName+"'][ip='"+ip+"']").text(data);
+        }).fail(function(){
+            $('<div><span>System Error</span></div>').dialog({title:"调用结果("+operationName+")",minHeight:200,modal: true});
+        });
+    }
+
+    /**
+     * read attribute
+     */
+    function readAttribute(ip,port,qualifer,attributeName){
+        $.ajax({
+            url: "/node/management/read",
+            data: {"ip":ip,"port":port, "attributeQualifier" : qualifer},
+            type: "post"
+        }).done(function(data) {
+            $("<div class='pull-center'><span >"+data+'</span></div>').dialog({title:"刷新结果("+attributeName+")",height:200,minHeight:200,modal: true});
+            $("code[attribute='"+attributeName+"'][ip='"+ip+"']").text(data);
+
+        }).fail(function(){
+            $('<div><span>System Error</span></div>').dialog({title:"刷新结果("+attributeName+")",minHeight:200,modal: true});
+        });
+
+    }
+    /**
+     * show nodes by conditions
+     */
+    function filterNode(){
+        var searchkeywords = $('#searchInput').val();
+
+        var searchstatus = $("input[name='filter_node_status']:checked").val();
+
+        $('#node_accordion .accordion-group:hidden').each(function(idx,ele){
+            $(ele).show();
+        });
+
+        if(searchkeywords){
+            $('#node_accordion .accordion-group').each(function (idx, ele) {
+                var keywords = $(ele).attr("search_keywords");
+                if (keywords.indexOf(searchkeywords) >= 0) {
+                    $(ele).show();
+                } else {
+                    $(ele).hide();
+                }
+            });
         }
-        ],
-        operations: [
-        {
-        name :"",
-        ret :"",
-        description:""
+
+        if(searchstatus){
+            $('#node_accordion .accordion-group:visible').each(function (idx, ele) {
+                var status = $(ele).attr("search_status");
+                if (searchstatus != status) {
+                    $(ele).hide();
+                }
+            });
         }
-        ]}
-    </textarea><br/>
-    <input type="submit" value="submit"/>
-</form>
+
+    }
+</script>
 
 
 
