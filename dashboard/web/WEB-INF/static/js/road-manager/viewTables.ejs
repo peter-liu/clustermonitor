@@ -1,0 +1,26 @@
+<table class="table table-bordered table-hover">
+        <thead>
+            <tr style="font-weight: bold">
+                <td>table name</td>
+                <td>column name</td>
+            </tr>
+        </thead>
+    <% for(var i = 0 ;i <data.length;i++){ %>
+        <tr>
+            <td>
+                    <% if(data[i].status){ %>
+                        <label class="checkbox inline" >
+                            <input  disabled="disabled" onclick="roadManager.fn.tableCheckAllOrNotAll(this)"  id="<%=data[i].table%>&<%=i%>" checked   type="checkbox" name="table$<%=data[i].table%>&<%=i%>" value="<%=data[i].table%>"/> <%=data[i].table%>
+                        </label>
+                    <%}else{%>
+                        <label class="checkbox inline">
+                            <input    id="<%=data[i].table%>&<%=i%>" onclick="roadManager.fn.tableCheckAllOrNotAll(this);" type="checkbox" name="table$<%=data[i].table%>&<%=i%>" value="<%=data[i].table%>"/> <%=data[i].table%>
+                        </label>
+                <%}%>
+            </td>
+            <td>
+
+            </td>
+        </tr>
+    <% } %>
+</table>

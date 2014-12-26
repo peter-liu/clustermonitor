@@ -1,0 +1,30 @@
+#*预加载图片,不然在某些浏览器生成js的时候会显示图片未加载的状况*#
+<img style="display: none;" src="$cdnResPath/images/loading.gif" alt=""/>
+<script type="text/javascript">
+		//遮罩
+		var PAGE_COVER = {
+			show : function(){
+				//loading图片高宽
+				var imgHeight = 400;
+				var imgWidth = 550;
+				var pageCoverDiv = "<div id=\"pageCoverDiv\" style=\"background-color:Gray;left:0px;opacity:0.5;position:absolute;top:0px;z-index:3;filter:alpha(opacity=50);-moz-opacity:0.5;-khtml-opacity:0.5;display:none;\"><img src=\"$cdnResPath/images/loading.gif\" height=\"" + imgHeight + "\" width=\"" + imgWidth + "\"/></div>";
+				var bh = $("body").height();
+			    var bw = $("body").width();
+				$("body").append($(pageCoverDiv));
+				$("#pageCoverDiv").css({
+			        height:bh,
+			        width:bw,
+			        display:"block"
+			    });
+				$("#pageCoverDiv img").css({
+					position: 'absolute',
+					left:(bw/2 - imgWidth/2) + 'px',
+					top:(bh/2 - imgHeight/2) + 'px'
+				});
+			},
+			hide : function(){
+				$("#pageCoverDiv").hide();
+				$("#pageCoverDiv").remove();
+			}
+		};
+</script>

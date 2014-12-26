@@ -1,0 +1,63 @@
+<div class="modal">
+    <div class="modal-header">
+        <h3>修改角色</h3>
+        <span id="showInfo" style="color: red"></span>
+    </div>
+    <div class="modal-body">
+        <form class="form-horizontal" id="addUserTypeForm" style="padding: 0;">
+            <input  type="hidden" name="id" id="id" value="<%=data.id%>">
+            <table class="table table-bordered" >
+                <tbody>
+                    <tr>
+                        <td style="border-top: none">
+                            <div class="control-group" >
+                                <label class="control-label" style="text-align: left" ><span style="color: red">*</span>用户名：</label>
+                                <div class="controls">
+                                    <input type="text" name="username" value="<%=data.name%>" id="username" class="input-medium required" disabled>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td style="border-top: none;border-left:none">
+                            <div class="control-group">
+                                <label class="control-label"  style="text-align: left" ><span style="color: red">*</span>角色：</label>
+                                <div class="controls">
+                                    <select name="userType" id="userType" class="input-medium">
+                                        <option value="ADMIN">Admin</option>
+                                        <option value="LEADER">Leader</option>
+                                        <option value="DEV">Dev</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" onclick="system.fn.addUserType('<%=data.randomDialogId%>');"   class="btn" id="save">确定</button>
+        <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+    </div>
+</div>
+<style type="text/css">
+    .form-horizontal .control-label {
+        padding-top: 15px;
+        width: 100px;
+    }
+    .form-horizontal .control-group {
+        margin-bottom: 0;
+    }
+    .form-horizontal .controls {
+        margin-left: 100px;
+        padding: 10px 0;
+    }
+    .error{
+        color: red;
+    }
+    .modal-header h3 {
+         font-size: 20px;
+        text-shadow: 0 1px 0 #ffffff;
+    }
+</style>
+

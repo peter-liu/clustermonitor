@@ -1,0 +1,25 @@
+
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr style="font-weight: bold">
+            <td>
+            <input name="hiveTableAll"   id="hiveTableAll" onclick="hiveTableAll(this)"  type="checkbox""/>
+            table name
+            </td>
+        </tr>
+    </thead>
+    <tbody>
+        <%for(var i = 0 ;i<data.length;i++){ %>
+            <tr>
+            	<td>
+                    <label class="checkbox inline">
+                   		<input name="hiveTable"   id="<%=data[i]%>" onclick=";" type="checkbox"  value="<%=data[i]%>"/> 
+                	<%=data[i]%>
+               		 </label>
+                </td>
+            </tr>
+        <%}%>
+    </tbody>
+</table>
+  
+

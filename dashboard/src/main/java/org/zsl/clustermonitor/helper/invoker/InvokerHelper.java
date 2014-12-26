@@ -9,6 +9,7 @@ import org.zsl.clustermonitor.helper.Protocol;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * TODO description
@@ -21,6 +22,7 @@ public class InvokerHelper {
     static {
         invokerMap.put(Protocol.JMX, new JMXInvoker());
         invokerMap.put(Protocol.Jolokia, new JolokiaInvoker());
+        invokerMap.put(Protocol.LocalTest, new LocalTestInvoker());
     }
 
     public static Object exec(Operation operation, Object[] params) {
@@ -30,7 +32,9 @@ public class InvokerHelper {
 
     public static Object read(Attribute attribute) {
         Node node = attribute.getService().getNode();
-        return invokerMap.get(node.getProtocol()).read(attribute);
+        Object ret = invokerMap.get(node.getProtocol()).read(attribute);
+        attribute.setCurrentValue(Objects.toString(ret,"Null"));
+        return ret;
     }
 
     public static List<Service> listService(Node node,List<String> serviceNames) {

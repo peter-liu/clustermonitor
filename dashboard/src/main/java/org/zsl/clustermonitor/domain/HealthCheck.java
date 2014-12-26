@@ -1,39 +1,41 @@
 package org.zsl.clustermonitor.domain;
 
 /**
- * TODO description
+ * TODO refactory
  * Created by liusz on 2014/12/23-22:09
  */
-public class HealthCheck {
+public class HealthCheck extends ServiceResource {
 
-    private Attribute attribute;
+    private ServiceResource target;
 
-    private Operation operation;
+    private WarningStrategy warningStrategy;
 
     private String expectValue;
 
     private String cron;
 
-    private Integer interval;
-
     private boolean isExpected = true;
+
+    private boolean isWarning = false;
+
+    private long lastWarningtime = 0L;
 
     private Object currentValue;
 
     public HealthCheck(Attribute attribute, String expectValue) {
-        this.attribute = attribute;
+        this.target = attribute;
         this.expectValue = expectValue;
     }
 
     public HealthCheck(Operation operation) {
-        this.operation = operation;
+        this.target = operation;
     }
 
     public HealthCheck(Operation operation, String expectValue) {
         if (operation.getRetType().equals("void")) {
             throw new RuntimeException("operation do not has return value !");
         }
-        this.operation = operation;
+        this.target = operation;
         this.expectValue = expectValue;
 
     }
@@ -55,11 +57,11 @@ public class HealthCheck {
     }
 
     public Integer getInterval() {
-        return interval;
+        return warningStrategy.getExecutionInterval();
     }
 
     public void setInterval(Integer interval) {
-        this.interval = interval;
+        this.warningStrategy.setExecutionInterval(interval);
     }
 
     public synchronized boolean isExpected() {
@@ -75,45 +77,63 @@ public class HealthCheck {
     }
 
     /**
-     * TODO decorate-mode
+     * TODO decorate-pattern
      */
-
     public synchronized void setCurrentValue(Object currentValue) {
         this.currentValue = currentValue;
         if (isExpected() && !currentValue.equals(expectValue)) {
             getService().addError(this);
+            setExpected(false);
         } else if (!isExpected() && currentValue.equals(expectValue)) {
             getService().removeError(this);
+            setExpected(true);
         }
+
     }
 
     public Service getService() {
-        if (attribute != null) {
-            return attribute.getService();
-        } else if (operation != null) {
-            return operation.getService();
-        }
-        return null;
+        return target.getService();
     }
 
-    public void setService(Service service){
-        if (attribute != null) {
-            attribute.setService(service);
-        } else if (operation != null) {
-            operation.setService(service);
-        }
+    public void setService(Service service) {
+        target.setService(service);
     }
 
-    public String getName(){
-        if (attribute != null) {
-            return attribute.getName();
-        } else if (operation != null) {
-            return operation.getName();
-        }
-        return null;
+    public String getName() {
+        return target.getName();
+    }
+
+    public String getDesc() {
+        return target.getDesc();
     }
 
     public Object getMonitorObject() {
-        return attribute != null ? attribute : operation;
+        return target;
+    }
+
+    public String getQualifier() {
+        return target.getQualifier();
+    }
+
+    public WarningStrategy getWarningStrategy() {
+        return warningStrategy;
+    }
+
+    public void setWarningStrategy(WarningStrategy warningStrategy) {
+        this.warningStrategy = warningStrategy;
+    }
+
+    public boolean isWarning() {
+        return !isExpected()
+                &&
+                (System.currentTimeMillis() - lastWarningtime) > warningStrategy.getWarningPeriod() * 1000;
+    }
+
+    public long getLastWarningtime() {
+        return lastWarningtime;
+    }
+
+    public void setLastWarningtime(long lastWarningtime) {
+        this.lastWarningtime = lastWarningtime;
     }
 }

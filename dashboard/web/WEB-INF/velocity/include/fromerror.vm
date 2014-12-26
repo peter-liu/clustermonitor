@@ -1,0 +1,13 @@
+#if($status.errors.hasErrors())
+    ## Global error messages
+    #foreach($e in $status.errorMessages)
+        <p>${e}</p>
+    #end
+    ## Field error messages
+    #foreach($f in $status.errors.fieldErrors)
+        #springBind("bindName.${f.field}")
+        #foreach($e in $status.errorMessages)
+            <p>${e}</p>
+        #end
+    #end
+#end

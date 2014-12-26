@@ -7,6 +7,7 @@ package org.zsl.clustermonitor.helper;
 public enum Protocol {
 
     Jolokia(),
-    JMX();
+    JMX(),
+    LocalTest();
 
 }

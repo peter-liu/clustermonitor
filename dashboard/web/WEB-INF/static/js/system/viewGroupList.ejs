@@ -1,0 +1,15 @@
+    <% for(var i = 0 ;i <data.length;i++){ %>
+        <tr>
+            <td>
+                <%= data[i].id%>
+            </td>
+            <td>
+                <%= data[i].name%>
+            </td>
+            <td>
+                <a class="btn" href="javascript:system.fn.showAddGroupDialog(<%=data[i].id%>,'<%=data[i].name%>')">修改</a>
+                <a class="btn" href="javascript:system.fn.deleteGroup(<%= data[i].id%>)">删除</a>
+                <br/>
+            </td>
+        </tr>
+    <% } %>

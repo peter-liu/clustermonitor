@@ -1,0 +1,122 @@
+#parse( "./include/variable.vm" )
+<!--start left-->
+<script type="text/javascript">
+	var menus = [
+		{id:1,name:"促销规则",parent:-1,order:1,path:"",icon:"fa-laptop"},
+		{id:11,name:"促销规则首页",parent:1,order:1,path:"$ctx/rule/index",icon:""},
+		{id:11,name:"新建促销规则",parent:1,order:1,path:"$ctx/rule/goAdd",icon:""},
+		
+		{id:2,name:"购买政策",parent:-1,order:1,path:"",icon:"fa-edit"},
+		{id:21,name:"购买政策首页",parent:2,order:1,path:"$ctx/policy/index",icon:""},
+
+        {id:3,name:"服务监控", parent:-1,order:1,path:"",icon:"fa-laptop"},
+        {id:31,name:"引擎监控", parent:3, order:1,path:"$ctx/mon/mgt/",icon:""}
+
+	];
+	
+	function menuClickCallback(name,path){
+		if(path==null||path=='') return;
+		$.unionTab.addTab({
+			title :name,
+			url : path
+		});
+	}
+	
+	
+	$(document).ready(function(){
+		$("#menu_sidebar").promotion_menu(menus,menuClickCallback);
+		
+		$("#menu_sidebar>li:first").addClass('on');
+	});
+	
+	
+	$.fn.promotion_menu = function(menus) {
+		var findChildren = function(menus, parent_id) {
+			return $.grep(menus, function(ele) {
+				return ele.parent == parent_id;
+			});
+		}
+		var findMenu = function(menus, id) {
+			return $.grep(menus, function(ele) {
+				return ele.parent == id;
+			})[0];
+		}
+		var constructSubMenu = function(children ) {
+			var container = '';
+			if(children.length>0){
+				container=  $('<ul id="collapse'+children[0].parent+'" class="collapse">');
+				for (e in children) {
+					var child = children[e];
+					var menu_sub = '<li><a href="#" path="'+child.path+'">'+child.name+'</a> </li>';
+					container.append(menu_sub);
+				}
+			}
+			return container;
+		}
+		var constructMenu = function(menu, menus) {
+			var header = $('<li > <a href="#collapse'+menu.id+'" data-toggle="collapse" data-parent="#menu_sidebar">'+menu.name+'<span></span></a></li>');
+			var children = findChildren(menus, menu.id);
+			var hasChildren = children && children.length > 0;
+			if (hasChildren) {
+				constructSubMenu(children).appendTo(header);
+			} 
+//			if (menu.expand) {
+//				$(header).addClass("active");
+//			}
+			return header;
+		}
+
+		var roots = $.grep(menus, function(ele) {
+			return !ele.parent || ele.parent == -1; 
+		});
+
+		$.each(roots, function(ele) {
+			$("#menu_sidebar").append(constructMenu(roots[ele], menus));
+		});
+		
+		$("#menu_sidebar a").click(function(){
+			menuClickCallback($(this).text(),$(this).attr('path'));
+		});
+		
+	};
+
+	
+</script>
+<style>
+
+ #menu_sidebar a {
+    text-decoration: none;
+}
+
+</style>
+<!--     <section id="menu_sidebar" class="sidebar"> -->
+<!--     </section> -->
+<ul class="left-nav" id="menu_sidebar">	
+<!-- 		<li class="on"> -->
+<!-- 		<a href="#collapse1" data-toggle="collapse" -->
+<!-- 		data-parent="#accordion1">促销规则（200）<span></span></a> -->
+<!-- 		<ul id="collapse1" class="collapse"> -->
+<!-- 			<li><a href="javascript:void(0);" path="$ctx/rule/index">促销规则1</a></li> -->
+<!-- 			<li><a href="#" path="b.html">促销规则2</a></li> -->
+<!-- 			<li><a href="#">促销规则3</a></li> -->
+<!-- 			<li><a href="#">促销规则4</a></li> -->
+<!-- 		</ul> -->
+<!-- 		</li> -->
+<!-- 	<li><a href="#collapse2" data-toggle="collapse" -->
+<!-- 		data-parent="#accordion1">购买政策（2)<span></span></a> -->
+<!-- 		<ul id="collapse2" class="collapse"> -->
+<!-- 			<li><a href="javascript:void(0);" path="$ctx/policy/index">购买政策</a></li> -->
+<!-- 			<li><a href="#">购买政策2</a></li> -->
+<!-- 			<li><a href="#">购买政策3</a></li> -->
+<!-- 			<li><a href="#">购买政策4</a></li> -->
+<!-- 		</ul></li> -->
+<!-- 	<li><a href="#collapse3" data-toggle="collapse" -->
+<!-- 		data-parent="#accordion1">用户管理<span></span></a> -->
+<!-- 		<ul id="collapse3" class="collapse"> -->
+<!-- 			<li><a href="#">用户管理1</a></li> -->
+<!-- 			<li><a href="#">用户管理2</a></li> -->
+<!-- 			<li><a href="#">用户管理3</a></li> -->
+<!-- 			<li><a href="#">用户管理4</a></li> -->
+<!-- 		</ul></li>  -->
+</ul> 
+<!--end left-->

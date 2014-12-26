@@ -1,0 +1,47 @@
+<div class="modal hide">
+    <div class="modal-header">
+        <h3>初始化状态</h3>
+        <span id="showInfo" style="color: red"></span>
+    </div>
+    <div class="modal-body">
+            <table class="table table-bordered" >
+                <thead>
+                    <tr style="font-weight: bold">
+                        <td>id</td>
+                        <td>tableName</td>
+                        <td>status</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% for(var i = 0;i<data.length;i++){%>
+                        <tr>
+                            <td><%=data[i].id%></td>
+                            <td><%=data[i].tableName%></td>
+                            <td>
+                                <%if(data[i].status == 'EMPTY'){%>
+                                    未初始化
+                                <%}else if(data[i].status == 'INITED'){%>
+                                    初始化完成
+                                <%}else if(data[i].status == 'SYNCING'){%>
+                                    进入同步状态
+                                <%}%>
+                            </td>
+                        </tr>
+                    <%}%>
+                </tbody>
+            </table>
+    </div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+    </div>
+</div>
+<style type="text/css">
+    .error{
+        color: red;
+    }
+    .modal-header h3 {
+         font-size: 20px;
+        text-shadow: 0 1px 0 #ffffff;
+    }
+</style>
+

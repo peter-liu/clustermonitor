@@ -1,0 +1,51 @@
+<div class="modal">
+    <div class="modal-header">
+        <h3>授权Group</h3>
+        <span id="showInfo" style="color: red"></span>
+    </div>
+    <div class="modal-body">
+        <form  id="addGroupForm" style="padding: 0;">
+            <input  type="hidden" name="userId" id="userId" value="<%=data.userId%>">
+            <div style="border: 1px solid #dddddd;">
+                <table class="table" >
+                    <tbody>
+                    <tr>
+                    <% for(var i = 0 ;i<data.length;i++){%>
+                        <td>
+                            <label class="checkbox inline" >
+                                <input    id="<%=data[i].id%>"    type="checkbox" name="groups" value="<%=data[i].id%>"/> <%=data[i].name%>
+                            </label>
+                        </td>
+                        <% if(i != 0 && i%4 == 0){%>
+                            </tr>
+                            <tr>
+                        <%}%>
+                    <%}%>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" onclick="system.fn.relatedGroup('<%=data.randomDialogId%>');"   class="btn" id="save">确定</button>
+        <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+    </div>
+</div>
+<style type="text/css">
+    .table th, .table td {
+        padding: 8px;
+        line-height: 20px;
+        text-align: left;
+        vertical-align: top;
+         border-top: none;
+    }
+    .error{
+        color: red;
+    }
+    .modal-header h3 {
+        font-size: 20px;
+        text-shadow: 0 1px 0 #ffffff;
+    }
+</style>
+

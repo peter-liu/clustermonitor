@@ -2,6 +2,8 @@ package org.zsl.clustermonitor.helper.invoker;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.google.common.collect.Collections2;
+import com.google.common.collect.Sets;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jolokia.client.J4pClient;
@@ -15,6 +17,7 @@ import org.zsl.clustermonitor.domain.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -33,7 +36,7 @@ public class JolokiaInvoker extends Invoker {
 
             J4pExecRequest execRequest = new J4pExecRequest(objectName, operation.getName());// TODO exec操作目前暂不支持参数传递
 
-            return j4p.execute(execRequest).asJSONObject().toJSONString();
+            return Objects.toString(j4p.execute(execRequest).asJSONObject().get("value"), "void");
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -90,7 +93,7 @@ public class JolokiaInvoker extends Invoker {
         return ret;
     }
 
-    private Service transformToService(String serviceName , JSONObject serviceObject) {
+    protected Service transformToService(String serviceName , JSONObject serviceObject) {
         Service ret = new Service();
 
         //JSONObject serviceConfig = object;//object.getJSONObject(objectName);
@@ -105,6 +108,7 @@ public class JolokiaInvoker extends Invoker {
 
         if (operations != null && !operations.isEmpty()) {
             Set<String> operationKeys = operations.keySet();
+
             if (CollectionUtils.isNotEmpty(operationKeys)) {
                 for (String key : operationKeys) {
                     JSONObject optConfig = operations.getJSONObject(key);
@@ -115,6 +119,7 @@ public class JolokiaInvoker extends Invoker {
                             optConfig.getJSONArray("args")
                                     .toArray(new JSONObject[optConfig.getJSONArray("args").size()]));
                     operation.setName(key);
+                    operation.setQualifier(serviceName+"/"+key);
                     operation.setRetType(optConfig.getString("ret"));
                     ret.addOperation(operation);
                 }
@@ -133,6 +138,7 @@ public class JolokiaInvoker extends Invoker {
                     attribute.setDesc(attrConfig.getString("desc"));
                     attribute.setName(key);
                     attribute.setType(attrConfig.getString("type"));
+                    attribute.setQualifier(serviceName+"/"+key);
                     ret.addAttribute(attribute);
                 }
             }

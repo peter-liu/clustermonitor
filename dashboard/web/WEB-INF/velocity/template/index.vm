@@ -1,0 +1,14 @@
+#parse( "./include/variable.vm" )
+<div class="wrap-in wrap-in-toggle">
+	<ul id="pageTab" class="nav nav-tabs"></ul>
+	<div id="pageTabContent"></div>
+</div>
+<script>
+	$(document).ready(function() {
+		$.unionTab.addTab({
+			title : '促销规则首页',
+			url : '$ctx/rule/index'
+		});
+		resetWindow();
+	});
+</script>
