@@ -14,6 +14,20 @@
     label.radio{
         font-size: 12px !important;
     }
+    .node-header{
+        background-color: #f5f5f5 !important;
+    }
+    .node-header a{
+        color: inherit; !important;
+        text-decoration: none !important;
+    }
+    .monitor-warinig{
+        color: #b90024 !important;
+        background-color: #F7AAAA !important;
+    }
+    #node_accordion{
+        width: 60%;
+    }
 </style>
 
 
@@ -58,14 +72,14 @@
     <h4>上线节点($nodes.size()) </h4>
     #foreach($node in $nodes)
         <div class="accordion-group" search_status="" search_keywords="${node.system} - ${node.ip}:${node.port} - ${node.protocol}">
-            <div class="accordion-heading node-header" errorCount="${node.errorCount}">
+            <div class="accordion-heading node-header" ip="${node.ip}" port="${node.port}" errorCount="${node.errorCount}">
                 <a class="accordion-toggle" data-toggle="collapse" data-parent="#node_accordion"
                    href="#NODE_${node.qualifer}">
                     <span>${node.system} - ${node.ip}:${node.port} - ${node.protocol}</span> <span
                         class="badge badge-success badge-count" style="float: right">0</span>
                 </a>
             </div>
-            <div id="NODE_${node.qualifer}" class="accordion-body collapse in collapsed">
+            <div id="NODE_${node.qualifer}" class="accordion-body collapse collapsed in" >
                 <div class="accordion-inner">
 
                     <table class="table table-bordered table-striped">
@@ -81,8 +95,8 @@
                         <tbody>
 
                             #foreach($healthCheck in $node.allHealthChecks)
-                            <tr class="healthcheck-status" status="${healthCheck.isExpected()}">
-                                <td width="10%">
+                            <tr >
+                                <td width="15%" class="healthcheck-status" ip="${node.ip}" port="${node.port}" healthcheckname="${healthCheck.name}" status="${healthCheck.isExpected()}">
                                     <code>${healthCheck.desc}</code>
                                 </td>
                                 <td width="15%">
@@ -114,7 +128,7 @@
 
                             #foreach($attribute in $node.allAttributes)
                             <tr  status="${attribute.isExpected()}">
-                                <td width="10%">
+                                <td width="15%">
                                     <code>${attribute.desc}</code>
                                 </td>
                                 <td width="15%">
@@ -148,7 +162,7 @@
 
                             #foreach($operation in $node.allOperations)
                             <tr>
-                                <td width="10%">
+                                <td width="15%">
                                     <code>${operation.desc}</code>
                                 </td>
                                 <td width="15%">
@@ -172,15 +186,15 @@
 ##    <button type="submit" class="btn btn-small" value="Register">Register</button>
 ##</form>
 <script>
-    $(function () {
-        $(".collapse:last").collapse("hide");
-        //$($(".collapse").get(0)).collapse("show");
 
+    $(function () {
+        $(".collapse").collapse("hide");
+        //$($(".collapse").get(0)).collapse("show");
+        //$(".collapsed").hide();
 
         $('#searchInput').keyup(function (t) {
             filterNode();
         });
-
         $("input[name='filter_node_status']").click(function(ele){
             filterNode();
         });
@@ -190,20 +204,20 @@
             $(".badge-count", ele).html(errorCount);
             if (errorCount > 0) {
                 $(ele).removeClass("alert-success");
-                $(ele).addClass("alert-error");
+                $(ele).addClass("monitor-warinig");
                 $(".badge-count", ele).removeClass("badge-success");
                 $(".badge-count", ele).addClass("badge-important");
             }
             $(ele).parent().attr("search_status",errorCount > 0 ? "error" : "correct");
         });
 
+        $('.healthcheck-status').each(function (idx,ele){
+            var status = $(ele).attr("status");
+            if(status == 'false'){
+                $(ele).addClass("monitor-warinig");
+            }
+        });
     })
-
-
-    function addErrorCount(ip,port,healthCheckName){
-        alert("add a error count");
-    }
-
 
     /**
      * health check
@@ -216,17 +230,20 @@
         }).done(function(data) {
             $("<div class='pull-center'><span >"+data+'</span></div>').dialog({title:"刷新结果("+healthCheckName+")",height:200,minHeight:200,modal: true});
             eval("var res = " + data);
-            $("code[healthcheck='"+healthCheckName+"'][ip='"+ip+"']").text(res.value);
 
-            (!res.health) && addErrorCount(ip, port, healthCheckName);
+            $.nodemanage.setHealthcheckText(ip,port,healthCheckName,res.value);
+
+            res.health ? $.nodemanage.correctHealthCheck(ip, port, healthCheckName) :  $.nodemanage.warnHealthCheck(ip, port, healthCheckName);
 
         }).fail(function(){
             $('<div><span>System Error</span></div>').dialog({title:"刷新结果("+healthCheckName+")",minHeight:200,modal: true});
         });
     }
 
+    /**
+     * execute an operation mannually
+     */
     function execOperation(ip,port,qualifier,operationName){
-        debugger
         $.ajax({
             url: "/node/management/exec",
             data: {"ip":ip,"port":port, "operationQualifier" : qualifier},
@@ -261,7 +278,6 @@
      */
     function filterNode(){
         var searchkeywords = $('#searchInput').val();
-
         var searchstatus = $("input[name='filter_node_status']:checked").val();
 
         $('#node_accordion .accordion-group:hidden').each(function(idx,ele){
@@ -269,8 +285,9 @@
         });
 
         if(searchkeywords){
+            searchkeywords = searchkeywords.toUpperCase();
             $('#node_accordion .accordion-group').each(function (idx, ele) {
-                var keywords = $(ele).attr("search_keywords");
+                var keywords = $(ele).attr("search_keywords").toUpperCase();
                 if (keywords.indexOf(searchkeywords) >= 0) {
                     $(ele).show();
                 } else {
@@ -287,7 +304,59 @@
                 }
             });
         }
+    }
 
+    $.nodemanage = {
+        getNodeHeaderElement : function(ip,port){
+            return $(".node-header[ip='"+ip+"'][port='"+port+"']");
+        },
+        getHealthCheckElement : function(ip,port,healthCheckName){
+            return $(".healthcheck-status[ip='"+ip+"'][port='"+port+"'][healthcheckname='"+healthCheckName+"']");
+        },
+        setHealthcheckText  : function(ip,port,healthCheckName,text){
+            $("code[ip='"+ip+"'][port='"+port+"'][healthcheck='"+healthCheckName+"']").text(text);
+        },
+        correctHealthCheck : function(ip,port,healthCheckName){
+            var itemEle = $.nodemanage.getHealthCheckElement(ip, port, healthCheckName);
+            $(itemEle).removeClass("monitor-warinig");
+            $(itemEle).attr("status","true");
+            var headerEle = $.nodemanage.getNodeHeaderElement(ip, port);
+            var errorCountEle = $(".badge-count",headerEle).text();
+            var errorCount = parseInt(errorCountEle,10);
+            if( ( --errorCount ) <= 0){
+                $(".badge-count",headerEle).text(0);
+                $(headerEle).removeClass("monitor-warinig");
+                $(".badge-count",headerEle).removeClass("badge-important");
+                $(".badge-count",headerEle).addClass("badge-success");
+                $(headerEle).parent().attr("search_status","correct");
+            }else{
+                $(".badge-count",headerEle).text(errorCount - 1);
+            }
+        },
+        warnHealthCheck: function(ip,port,healthCheckName){
+            var itemEle = $.nodemanage.getHealthCheckElement(ip, port, healthCheckName);
+            var current_status = $(itemEle).attr("status");
+            if(current_status == 'false'){
+                return;
+            }
+
+            $(itemEle).addClass("monitor-warinig");
+            $(itemEle).attr("status","false");
+
+            $(itemEle).addClass("monitor-warinig");
+            $(itemEle).attr("status","false");
+
+            debugger
+            var headerEle = $(".node-header[ip='"+ip+"'][port='"+port+"']");
+
+            $(headerEle).parent().attr("search_status","error");
+            $(headerEle).addClass("monitor-warinig");
+
+            $(".badge-count",headerEle).removeClass("badge-success");
+            $(".badge-count",headerEle).addClass("badge-important");
+            var errorCount = $(".badge-count",headerEle).text();
+            $(".badge-count",headerEle).text(parseInt(errorCount,10) + 1);
+        }
     }
 </script>
 

@@ -2,12 +2,10 @@ package org.zsl.clustermonitor.domain;
 
 import com.google.common.base.Joiner;
 import org.apache.commons.collections.CollectionUtils;
-import org.springframework.scheduling.quartz.SimpleTriggerBean;
 import org.zsl.clustermonitor.helper.Protocol;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * TODO description

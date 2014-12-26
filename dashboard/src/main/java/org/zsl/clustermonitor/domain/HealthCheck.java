@@ -8,13 +8,17 @@ public class HealthCheck extends ServiceResource {
 
     private ServiceResource target;
 
+    private WarningStrategy warningStrategy;
+
     private String expectValue;
 
     private String cron;
 
-    private Integer interval;
-
     private boolean isExpected = true;
+
+    private boolean isWarning = false;
+
+    private long lastWarningtime = 0L;
 
     private Object currentValue;
 
@@ -53,11 +57,11 @@ public class HealthCheck extends ServiceResource {
     }
 
     public Integer getInterval() {
-        return interval;
+        return warningStrategy.getExecutionInterval();
     }
 
     public void setInterval(Integer interval) {
-        this.interval = interval;
+        this.warningStrategy.setExecutionInterval(interval);
     }
 
     public synchronized boolean isExpected() {
@@ -73,16 +77,18 @@ public class HealthCheck extends ServiceResource {
     }
 
     /**
-     * TODO decorate-mode
+     * TODO decorate-pattern
      */
-
     public synchronized void setCurrentValue(Object currentValue) {
         this.currentValue = currentValue;
         if (isExpected() && !currentValue.equals(expectValue)) {
             getService().addError(this);
+            setExpected(false);
         } else if (!isExpected() && currentValue.equals(expectValue)) {
             getService().removeError(this);
+            setExpected(true);
         }
+
     }
 
     public Service getService() {
@@ -107,5 +113,27 @@ public class HealthCheck extends ServiceResource {
 
     public String getQualifier() {
         return target.getQualifier();
+    }
+
+    public WarningStrategy getWarningStrategy() {
+        return warningStrategy;
+    }
+
+    public void setWarningStrategy(WarningStrategy warningStrategy) {
+        this.warningStrategy = warningStrategy;
+    }
+
+    public boolean isWarning() {
+        return !isExpected()
+                &&
+                (System.currentTimeMillis() - lastWarningtime) > warningStrategy.getWarningPeriod() * 1000;
+    }
+
+    public long getLastWarningtime() {
+        return lastWarningtime;
+    }
+
+    public void setLastWarningtime(long lastWarningtime) {
+        this.lastWarningtime = lastWarningtime;
     }
 }

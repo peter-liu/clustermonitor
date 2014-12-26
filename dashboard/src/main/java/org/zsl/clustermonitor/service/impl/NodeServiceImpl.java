@@ -7,7 +7,9 @@ import org.zsl.clustermonitor.domain.*;
 import org.zsl.clustermonitor.helper.Protocol;
 import org.zsl.clustermonitor.helper.invoker.InvokerHelper;
 import org.zsl.clustermonitor.provider.RegistryStore;
+import org.zsl.clustermonitor.service.HealthCheckService;
 import org.zsl.clustermonitor.service.NodeService;
+import org.zsl.clustermonitor.service.WarningService;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -21,6 +23,9 @@ public class NodeServiceImpl implements NodeService {
 
     @Resource
     private RegistryStore registryStore;
+
+    @Resource
+    private HealthCheckService healthCheckService;
 
     @Override public void register(String ip, Integer port, String config) {
         JSONObject rawConfig = JSONObject.parseObject(config);
@@ -51,6 +56,17 @@ public class NodeServiceImpl implements NodeService {
 
         // store node
         registryStore.store(nodeRegistry);
+
+        // register healthchecks in scheduled check job
+        // TODO 1: a configurable warning strategy
+        // TODO 2: a customized warning strategy
+        WarningStrategy warningStrategy = new WarningStrategy();
+        warningStrategy.setExecutionInterval(30);
+        warningStrategy.setWarningPeriod(300);
+        for(HealthCheck healthCheck : nodeRegistry.getNode().getAllHealthChecks()){
+            healthCheck.setWarningStrategy(warningStrategy);
+            healthCheckService.scheduleHealthCheck(healthCheck);
+        }
     }
 
     @Override public void unregister(String ip, Integer port) {

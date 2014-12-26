@@ -14,6 +14,10 @@ public class ServiceResource {
 
     private String desc;
 
+    private String invokingExceptionMessage;
+
+    private Exception invokingException;
+
     public String getQualifier() {
         return qualifier;
     }
@@ -44,5 +48,21 @@ public class ServiceResource {
 
     public void setService(Service service) {
         this.service = service;
+    }
+
+    public String getInvokingExceptionMessage() {
+        return invokingExceptionMessage;
+    }
+
+    public void setInvokingExceptionMessage(String invokingExceptionMessage) {
+        this.invokingExceptionMessage = invokingExceptionMessage;
+    }
+
+    public Exception getInvokingException() {
+        return invokingException;
+    }
+
+    public void setInvokingException(Exception invokingException) {
+        this.invokingException = invokingException;
     }
 }
