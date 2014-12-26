@@ -23,7 +23,7 @@ public interface HealthCheckService {
      * @param healthCheck
      * @param message
      */
-    public void waringHealthCheck(HealthCheck healthCheck, String message);
+    public void warningHealthCheck(HealthCheck healthCheck, String message);
 
     /**
      * remove health checks

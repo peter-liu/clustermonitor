@@ -28,7 +28,7 @@ public class JdkTimerHealthCheckServiceImpl implements HealthCheckService {
         timer.schedule(new CheckHealthTimerTask(healthCheck), 0 , healthCheck.getInterval() * 1000);
     }
 
-    @Override public void waringHealthCheck(HealthCheck healthCheck, String message) {
+    @Override public void warningHealthCheck(HealthCheck healthCheck, String message) {
         warningService.warn(healthCheck);
     }
 
